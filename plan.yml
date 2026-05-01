@@ -1,0 +1,36 @@
+version: 1
+phases:
+  - id: fase1
+    name: "Fundação SaaS"
+    goal: "Multi-tenant funcional"
+    tasks:
+      - id: tenant-persona
+        title: "Tenant + Persona models"
+        status: done
+      - id: middleware-tenant
+        title: "Middleware get_current_tenant"
+        status: done
+      - id: tabelas-calendario
+        title: "Tabelas content_calendars + calendar_posts"
+        status: done
+      - id: clerk-jwt
+        title: "Verify Clerk JWT (parcial)"
+        status: done
+      - id: login-clerk
+        title: "Login real Clerk + dois frontends"
+        status: in_progress
+        critical: true
+        description: |
+          admin.dracena (interno) + saas.app (cliente).
+          Frontends ainda não criados. Bloqueia primeiro cliente externo.
+      - id: rls-postgres
+        title: "Row-Level Security no Postgres"
+        status: todo
+        tags: [adicionado]
+
+  - id: fase2
+    name: "Motor editorial"
+    tasks:
+      - id: editor-posts
+        title: "CRUD de posts"
+        status: in_progress
