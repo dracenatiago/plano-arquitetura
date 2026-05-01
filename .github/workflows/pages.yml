@@ -1,12 +1,51 @@
-name: Publica Dashboard
-on: [push]
+name: Deploy Dashboard
+
+on:
+  push:
+    branches: [main]
+    paths: ['plan.yml', 'gera_dashboard.py']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# resolve o aviso do Node.js 20
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: pip install pyyaml
-      - run: python gera_dashboard.py
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: 'index.html' }
-      - uses: actions/deploy-pages@v4
+      - name: Baixa código
+        uses: actions/checkout@v4
+
+      - name: Instala Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instala dependência
+        run: pip install pyyaml
+
+      - name: Gera o HTML
+        run: python gera_dashboard.py
+
+      - name: Verifica se gerou
+        run: ls -lh index.html
+
+      - name: Envia para o Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
