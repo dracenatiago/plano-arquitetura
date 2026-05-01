@@ -1,0 +1,12 @@
+name: Publica Dashboard
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pyyaml
+      - run: python gera_dashboard.py
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: 'index.html' }
+      - uses: actions/deploy-pages@v4
